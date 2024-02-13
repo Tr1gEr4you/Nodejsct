@@ -1,0 +1,52 @@
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+    const socket = io();
+
+    socket.on('message', (message) => {
+        const messageElement = document.createElement('div');
+        messageElement.style.color = socket.color || 'black'; 
+        messageElement.textContent = message;
+        document.getElementById('messages').appendChild(messageElement);
+    });
+
+    socket.on('updateUsers', (users) => {
+        const userListElement = document.getElementById('user-list');
+        userListElement.innerHTML = '';
+        for (const id in users) {
+            const user = users[id];
+            const userElement = document.createElement('li');
+            userElement.style.color = user.color || 'black'; 
+            userElement.textContent = user.username;
+            userListElement.appendChild(userElement);
+        }
+    });
+
+    function joinChat() {
+        const username = prompt('Please introduce yourself:');
+        const color = prompt('Choose a color for your messages(english):');
+        socket.emit('join', { username, color });
+    }
+
+    function sendMessage() {
+        const message = document.getElementById('message-input').value;
+        const recipient = document.getElementById('recipient-input').value;
+        socket.emit('message', { message, recipient });
+    }
+</script>
+
+<div>
+    <button onclick="joinChat()">Join the chat</button>
+</div>
+<div>
+    <input type="text" id="message-input" placeholder="Enter a message">
+    <input type="text" id="recipient-input" placeholder="To whom (optional)">
+    <button onclick="sendMessage()">Send</button>
+</div>
+<div>
+    <div id="messages"></div>
+</div>
+<div>
+    <h2>Users in the chat: </h2>
+    <ul id="user-list"></ul>
+</div>
