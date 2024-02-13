@@ -58,7 +58,6 @@ async function getValute(valuteCode, fromDate, toDate) {
 rl.question('Введите код валюты: ', async (valuteCode) => {
     rl.question('Введите начальную дату в формате YYYY-MM-DD: ', async (fromDate) => {
         rl.question('Введите конечную дату в формате YYYY-MM-DD: ', async (toDate) => {
-            // Вызов операции GetCursDynamicXML
             await getValute(valuteCode, fromDate, toDate);
             rl.close();
         });
